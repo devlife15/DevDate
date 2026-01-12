@@ -2,7 +2,7 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-300 shadow-sm">
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl">DevTinder</a>
+        <a className="btn btn-ghost text-xl">DevDate</a>
       </div>
       <div className="flex gap-2">
         <div className="dropdown dropdown-end">
