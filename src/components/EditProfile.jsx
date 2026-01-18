@@ -9,19 +9,23 @@ const EditProfile = ({ user }) => {
   const dispatch = useDispatch();
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
-  const [photoURL, setPhotoURL] = useState(user.photoURL);
-  const [age, setAge] = useState(user.age);
-  const [gender, setGender] = useState(user.gender);
-  const [about, setAbout] = useState(user.about);
-  const [skills, setSkills] = useState(user.skills);
+  const [photoURL, setPhotoURL] = useState(user?.photoURL || "");
+  const [age, setAge] = useState(user?.age || "");
+  const [gender, setGender] = useState(user?.gender || "");
+  const [about, setAbout] = useState(user?.about || "");
+  const [skills, setSkills] = useState(
+    Array.isArray(user?.skills) ? user.skills.join(", ") : "",
+  );
   const [toast, setToast] = useState(false);
 
   const updateProfile = async () => {
     try {
       const skillsArray = skills
-        .split(",")
-        .map((skill) => skill.trim())
-        .filter(Boolean);
+        ? skills
+            .split(",")
+            .map((skill) => skill.trim())
+            .filter(Boolean)
+        : [];
       const res = await axios.patch(
         BASE_URL + "/profile/edit",
         {
@@ -33,7 +37,7 @@ const EditProfile = ({ user }) => {
           about,
           skills: skillsArray,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       dispatch(addUser(res?.data?.data));
       setToast(true);
@@ -41,7 +45,9 @@ const EditProfile = ({ user }) => {
         setToast(false);
       }, 3000);
     } catch (error) {
-      console.log("Something went wrong");
+      console.log("Error details:", error);
+      console.log("Error response:", error.response?.data);
+      console.log("Error status:", error.response?.status);
     }
   };
 
@@ -88,7 +94,6 @@ const EditProfile = ({ user }) => {
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Gender</legend>
           <select
-            defaultValue="Pick a color"
             className="select"
             value={gender}
             onChange={(e) => setGender(e.target.value)}

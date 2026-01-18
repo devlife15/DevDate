@@ -21,16 +21,15 @@ const Connections = () => {
     getConnections();
   }, []);
 
+  if (!connections) return;
   if (connections.length === 0) return <h1>No Connections Found</h1>;
 
   return (
-    connections && (
-      <div className="flex justify-center flex-wrap my-10 gap-5">
-        {connections.map((connection, index) => {
-          return <ProfileCard key={index} user={connection} />;
-        })}
-      </div>
-    )
+    <div className="flex justify-center flex-wrap my-10 gap-5">
+      {connections.map((connection, index) => {
+        return <ProfileCard key={index} user={connection} />;
+      })}
+    </div>
   );
 };
 
